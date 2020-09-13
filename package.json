@@ -19,7 +19,7 @@
 
   "private": false, "license": "ISC",
 
-  "main": "splitMail.mjs",
+  "main": "src/splitMail.mjs",
   "bin": "cli.mjs",
   "scripts": { "test": "nodejs test/all.js" },
   "directories": { "test": "test" },
