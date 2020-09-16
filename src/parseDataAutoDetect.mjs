@@ -16,7 +16,9 @@ const parsersByFext = {
 async function parseDataAutoDetect(dataAtt) {
   // Async because in the future, we might support file formats for which
   // we might need to communicate to decode them.
-  const fext = ((/\.(\w+)$/.exec(dataAtt.fileName || '') || false)[1] || '');
+  const fext = (dataAtt.fileFormat
+    || (/\.(\w+)$/.exec(dataAtt.fileName || '') || false)[1]
+    || '');
   const parse = mustBe.tProp('Parser for filename extension ',
     parsersByFext, 'fun', fext);
   return vTry.pr(parse, 'Parse data file in format ' + fext)(dataAtt.body);

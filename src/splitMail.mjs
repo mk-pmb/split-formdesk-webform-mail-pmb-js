@@ -14,17 +14,32 @@ const EX = async function splitMail(rawMail, opt) {
   if (!opt) { return splitMail(rawMail, true); }
   const dpx = (opt.destPrefix || '');
   const mail = muMix(rawMail);
-  const [msg, dataPartRaw, ...uploads] = mail.body;
-  await vTry.pr(promisedFs.writeFile, 'Save the message content part'
-  )(dpx + 'msg.txt', msg);
+  const unclaimedBodyParts = mail.body;
 
+  function ifHeader(h, f) {
+    const v = mail.firstHeader(h);
+    return v && f(v);
+  }
+
+  const msgFmt = mail.firstHeader('x-mailsplit-msgfmt', '');
+  if (msgFmt !== 'absent') {
+    const msgPart = unclaimedBodyParts.shift();
+    await vTry.pr(promisedFs.writeFile, 'Save the message content part'
+    )(dpx + 'msg.txt', msgPart);
+  }
+
+  const dataPartRaw = unclaimedBodyParts.shift();
   const dataAtt = (await vTry.pr(saveAttachment, 'Save the data file'
-  )(dataPartRaw, opt));
+  )(dataPartRaw, {
+    ...ifHeader('x-mailsplit-datafilename', n => ({ saveAs: n })),
+    ...opt,
+  }));
+  ifHeader('x-mailsplit-datafilefmt', (fmt) => { dataAtt.fileFormat = fmt; });
 
   function saveFiles(up, idx) {
     return vTry.pr(saveAttachment, 'Save upload file #' + idx)(up, opt);
   }
-  await Promise.all(uploads.map(saveFiles));
+  await Promise.all(unclaimedBodyParts.map(saveFiles));
 
   const dataDict = await parseDataAutoDetect(dataAtt);
   Object.keys(dataDict).forEach(function refine(k) {
@@ -37,6 +52,7 @@ const EX = async function splitMail(rawMail, opt) {
   await vTry.pr(promisedFs.writeFile, 'Save JSON data'
   )(dpx + 'data.json', sortedJson(dataDict, null, -2));
 };
+
 
 
 

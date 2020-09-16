@@ -16,7 +16,7 @@ function defuseFileName(orig) {
 async function saveAttachment(raw, opt) {
   if (!opt) { return saveAttachment(raw, true); }
   const att = mAtt.parseAttachment(raw);
-  const origFn = mustBe.nest('Attachment filename', att.fileName);
+  const origFn = mustBe.nest('Attachment filename', opt.saveAs || att.fileName);
   const destFn = ((opt.destPrefix || '')
     + (opt.defuseFileName || defuseFileName)(origFn));
   await promisedFs.writeFile(destFn, att.body);
