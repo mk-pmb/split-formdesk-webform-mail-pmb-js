@@ -36,10 +36,13 @@ const EX = async function splitMail(rawMail, opt) {
   }));
   ifHeader('x-mailsplit-datafilefmt', (fmt) => { dataAtt.fileFormat = fmt; });
 
-  function saveFiles(up, idx) {
-    return vTry.pr(saveAttachment, 'Save upload file #' + idx)(up, opt);
+  const uplOpt = { ...opt };
+  ifHeader('x-mailsplit-upfiles-nameprefix',
+    (p) => { uplOpt.untrustedFilenamePrefix = p; });
+  function saveUploadedFile(up, idx) {
+    return vTry.pr(saveAttachment, 'Save uploaded file #' + idx)(up, uplOpt);
   }
-  await Promise.all(unclaimedBodyParts.map(saveFiles));
+  await Promise.all(unclaimedBodyParts.map(saveUploadedFile));
 
   const dataDict = await parseDataAutoDetect(dataAtt);
   Object.keys(dataDict).forEach(function refine(k) {
