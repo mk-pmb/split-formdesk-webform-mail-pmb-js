@@ -7,7 +7,7 @@ import pathLib from 'path';
 
 import promisedFs from 'nofs';
 
-import splitMail from '.';
+import splitMail from '..';
 
 (async function main() {
   const inputFile = String(process.argv[2] || '');

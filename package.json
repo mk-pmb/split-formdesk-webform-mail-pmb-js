@@ -1,5 +1,5 @@
 { "name": "split-formdesk-webform-mail-pmb",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Split email from a FormDesk web form into separate files.",
   "keywords": [
     "FormDesk",
@@ -20,7 +20,7 @@
   "private": false, "license": "ISC",
 
   "main": "src/splitMail.mjs",
-  "bin": "cli.js",
+  "bin": "bin/cli.js",
   "scripts": { "test": "nodejs test/all.js" },
   "directories": { "test": "test" },
 
