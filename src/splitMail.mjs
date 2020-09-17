@@ -50,7 +50,7 @@ const EX = async function splitMail(rawMail, opt) {
     }
   });
   await vTry.pr(promisedFs.writeFile, 'Save JSON data'
-  )(dpx + 'data.json', sortedJson(dataDict, null, -2));
+  )(dpx + 'data.json', sortedJson(dataDict, null, -2) + '\n');
 };
 
 

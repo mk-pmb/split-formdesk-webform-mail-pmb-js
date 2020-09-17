@@ -5,11 +5,13 @@ import mustBe from 'typechecks-pmb/must-be';
 
 import parseDataXml from './parseDataXml';
 import parseDataCsv from './parseDataCsv';
+import firstLineFieldMarker200916 from './parseDataFirstLineFieldMarker200916';
 
 
 const parsersByFext = {
   csv: parseDataCsv,    // cType: 'application/octet-stream'
   xml: parseDataXml,    // cType: 'text/xml'
+  firstLineFieldMarker200916,
 };
 
 

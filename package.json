@@ -1,5 +1,5 @@
 { "name": "split-formdesk-webform-mail-pmb",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Split email from a FormDesk web form into separate files.",
   "keywords": [
     "FormDesk",
