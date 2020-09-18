@@ -1,6 +1,7 @@
 // -*- coding: utf-8, tab-width: 2 -*-
 
 import muMix from 'parse-multipart-mixed-mail-pmb';
+import mustBe from 'typechecks-pmb/must-be';
 import vTry from 'vtry';
 import promisedFs from 'nofs';
 import sortedJson from 'safe-sortedjson';
@@ -13,8 +14,8 @@ import parseDataAutoDetect from './parseDataAutoDetect';
 const EX = async function splitMail(rawMail, opt) {
   if (!opt) { return splitMail(rawMail, true); }
   const dpx = (opt.destPrefix || '');
-  const mail = muMix(rawMail);
-  const unclaimedBodyParts = mail.body;
+  const mail = muMix(rawMail, { acceptJustText: true });
+  const unclaimedBodyParts = mustBe('nonEmpty ary', 'Body parts')(mail.body);
 
   function ifHeader(h, f) {
     const v = mail.firstHeader(h);
