@@ -10,6 +10,11 @@ function parseDataFLFM(origText) {
   let [fmark, body] = splitOnce('\n', mustBe('str | buf',
     'Data attachment body')(origText).toString('UTF-8'));
   mustBe.nest('Field marker', fmark);
+
+  let pair;
+  // Discard the potential dummy value of the first pseudo-field:
+  [pair, body] = (splitOnce(fmark, body) || []);
+  // … and ensure there are real fields after that:
   mustBe.nest('Data section', body);
   fmark = '\n' + fmark;
   const data = {};
@@ -26,7 +31,6 @@ function parseDataFLFM(origText) {
     }
   }
 
-  let pair;
   while (body) {
     [pair, body] = (splitOnce(fmark, body) || [body]);
     learn(splitOnce('\n', pair));
